@@ -70,6 +70,16 @@ def init_db():
             purchase_year INTEGER,
             created_at TEXT NOT NULL DEFAULT (datetime('now'))
         );
+
+        CREATE TABLE IF NOT EXISTS data_consent (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            consent_local_storage INTEGER NOT NULL DEFAULT 1,
+            consent_sharing INTEGER NOT NULL DEFAULT 0,
+            consent_analytics INTEGER NOT NULL DEFAULT 0,
+            updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+        INSERT OR IGNORE INTO data_consent (id) VALUES (1);
     """)
     conn.commit()
     conn.close()
@@ -260,5 +270,53 @@ def get_appliances() -> list[dict]:
 def delete_appliance(appliance_id: int):
     conn = get_connection()
     conn.execute("DELETE FROM appliances WHERE id = ?", (appliance_id,))
+    conn.commit()
+    conn.close()
+
+
+# ── Data Consent ─────────────────────────────────────────────────────────────
+
+def get_consent() -> dict:
+    conn = get_connection()
+    row = conn.execute("SELECT * FROM data_consent WHERE id = 1").fetchone()
+    conn.close()
+    return dict(row) if row else {"consent_local_storage": 1, "consent_sharing": 0, "consent_analytics": 0}
+
+
+def update_consent(local_storage: bool, sharing: bool, analytics: bool):
+    conn = get_connection()
+    conn.execute(
+        "UPDATE data_consent SET consent_local_storage = ?, consent_sharing = ?, consent_analytics = ?, updated_at = datetime('now') WHERE id = 1",
+        (int(local_storage), int(sharing), int(analytics)),
+    )
+    conn.commit()
+    conn.close()
+
+
+def export_all_data() -> dict:
+    conn = get_connection()
+    data = {
+        "household": dict(conn.execute("SELECT * FROM household WHERE id = 1").fetchone()),
+        "devices": [dict(r) for r in conn.execute("SELECT * FROM devices").fetchall()],
+        "bills": [dict(r) for r in conn.execute("SELECT * FROM bills").fetchall()],
+        "appliances": [dict(r) for r in conn.execute("SELECT * FROM appliances").fetchall()],
+        "consent": dict(conn.execute("SELECT * FROM data_consent WHERE id = 1").fetchone()),
+        "readings_count": conn.execute("SELECT COUNT(*) as cnt FROM energy_readings").fetchone()["cnt"],
+    }
+    conn.close()
+    return data
+
+
+def delete_all_data():
+    conn = get_connection()
+    conn.executescript("""
+        DELETE FROM energy_readings;
+        DELETE FROM bills;
+        DELETE FROM appliances;
+        DELETE FROM devices;
+        UPDATE household SET household_name='My Home', location='', state='Selangor',
+            provider='TNB', household_size=4, monthly_budget=200.0, alert_threshold=0.8, language='en';
+        UPDATE data_consent SET consent_local_storage=1, consent_sharing=0, consent_analytics=0;
+    """)
     conn.commit()
     conn.close()

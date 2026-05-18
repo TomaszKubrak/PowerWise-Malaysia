@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -46,7 +47,6 @@ demo_guide.render_toggle(lang)
 demo_guide.render_nav()
 
 if st.sidebar.button("🔄 Reset Demo Data", help="Delete database and re-seed with demo data"):
-    import os
     if os.path.exists(db.DB_PATH):
         os.remove(db.DB_PATH)
     db.init_db()
@@ -361,6 +361,42 @@ elif page == menu_items[4]:
                 if name and serial:
                     db.add_device(name, serial)
                     st.rerun()
+
+    # ── Privacy & Data Consent ────────────────────────────────────────────────
+    st.divider()
+    st.subheader(t("privacy_title", lang))
+
+    consent = db.get_consent()
+
+    st.info(t("data_collected_info", lang))
+
+    with st.form("consent_form"):
+        c_storage = st.checkbox(t("consent_data_storage", lang), value=bool(consent["consent_local_storage"]))
+        c_sharing = st.checkbox(t("consent_sharing", lang), value=bool(consent["consent_sharing"]))
+        c_analytics = st.checkbox(t("consent_analytics", lang), value=bool(consent["consent_analytics"]))
+
+        if st.form_submit_button(t("consent_saved", lang).replace("!", "")):
+            db.update_consent(c_storage, c_sharing, c_analytics)
+            st.success(t("consent_saved", lang))
+            st.rerun()
+
+    with st.expander(t("data_rights_title", lang)):
+        st.write(t("data_rights_info", lang))
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button(t("export_data", lang)):
+                import json
+                data = db.export_all_data()
+                export_path = os.path.join(os.path.dirname(db.DB_PATH), "powerwise_export.json")
+                with open(export_path, "w") as f:
+                    json.dump(data, f, indent=2, default=str)
+                st.success(t("export_success", lang, path=export_path))
+        with col2:
+            if st.button(t("delete_all_data", lang), type="primary"):
+                db.delete_all_data()
+                st.warning(t("delete_confirm", lang))
+                st.rerun()
 
 # ── Demo overlay (rendered last so it floats on top) ─────────────────────────
 demo_guide.render_overlay()

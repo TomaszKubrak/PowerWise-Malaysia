@@ -107,6 +107,22 @@ STRINGS = {
         "serial_number": "Serial Number",
         "add_button": "Add",
         "delete_button": "Delete",
+
+        # Privacy & Consent
+        "privacy_title": "Privacy & Data Consent",
+        "consent_data_storage": "I consent to local storage of my household energy data",
+        "consent_sharing": "I consent to optional data sharing with utility provider for service improvement",
+        "consent_analytics": "I consent to anonymized usage analytics for app improvement",
+        "data_collected_title": "Data We Collect",
+        "data_collected_info": "PowerWise Malaysia stores: household profile, electricity bills, meter readings, appliance info, and budget settings. All data is stored **locally on your device**.",
+        "data_rights_title": "Your Rights (PDPA 2010)",
+        "data_rights_info": "You can view, correct, export, or permanently delete all your data at any time.",
+        "export_data": "Export My Data (JSON)",
+        "delete_all_data": "Delete All My Data",
+        "delete_confirm": "All data has been permanently deleted.",
+        "export_success": "Data exported to: {path}",
+        "consent_saved": "Privacy preferences saved!",
+        "privacy_policy_link": "View Privacy Summary",
     },
 
     "ms": {
@@ -215,6 +231,22 @@ STRINGS = {
         "serial_number": "Nombor Siri",
         "add_button": "Tambah",
         "delete_button": "Padam",
+
+        # Privacy & Consent
+        "privacy_title": "Privasi & Persetujuan Data",
+        "consent_data_storage": "Saya bersetuju dengan penyimpanan data tenaga isi rumah secara setempat",
+        "consent_sharing": "Saya bersetuju dengan perkongsian data pilihan dengan pembekal utiliti",
+        "consent_analytics": "Saya bersetuju dengan analitik penggunaan tanpa nama",
+        "data_collected_title": "Data Yang Dikumpul",
+        "data_collected_info": "PowerWise Malaysia menyimpan: profil isi rumah, bil elektrik, bacaan meter, maklumat peralatan, dan tetapan bajet. Semua data disimpan **secara setempat pada peranti anda**.",
+        "data_rights_title": "Hak Anda (PDPA 2010)",
+        "data_rights_info": "Anda boleh melihat, membetulkan, mengeksport, atau memadam semua data anda pada bila-bila masa.",
+        "export_data": "Eksport Data Saya (JSON)",
+        "delete_all_data": "Padam Semua Data Saya",
+        "delete_confirm": "Semua data telah dipadam secara kekal.",
+        "export_success": "Data dieksport ke: {path}",
+        "consent_saved": "Keutamaan privasi disimpan!",
+        "privacy_policy_link": "Lihat Ringkasan Privasi",
     },
 }
 
