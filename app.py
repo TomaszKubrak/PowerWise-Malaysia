@@ -6,8 +6,11 @@ from datetime import datetime, timedelta
 import db
 import tariff
 from i18n import t
+import seed_data
 
 db.init_db()
+if db.get_device_count() == 0:
+    seed_data.seed()
 
 st.set_page_config(page_title="PowerWise Malaysia", page_icon="⚡", layout="wide")
 
