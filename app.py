@@ -7,6 +7,7 @@ import db
 import tariff
 from i18n import t
 import seed_data
+import demo_guide
 
 db.init_db()
 if db.get_device_count() == 0:
@@ -29,11 +30,20 @@ menu_items = [
     f"⚙️ {t('menu_settings', lang)}",
 ]
 
-page = st.sidebar.radio("Menu", menu_items, label_visibility="collapsed")
+# Demo guide controls which page is shown when active
+demo_guide.init_demo_state()
+demo_target = demo_guide.get_target_page()
+default_index = demo_target if demo_target is not None else 0
+
+page = st.sidebar.radio("Menu", menu_items, index=default_index, label_visibility="collapsed")
 
 st.sidebar.divider()
 st.sidebar.caption(t("budget_label", lang, amount=household["monthly_budget"]))
 st.sidebar.caption(t("provider_label", lang, provider=household["provider"]))
+
+# Demo guide
+demo_guide.render_toggle(lang)
+demo_guide.render_nav()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -99,16 +109,19 @@ if page == menu_items[0]:
 elif page == menu_items[1]:
     st.title(t("enter_reading_title", lang))
 
+    dv = demo_guide.get_demo_values()
     tab1, tab2 = st.tabs([t("tab_bill", lang), t("tab_meter", lang)])
 
     with tab1:
         with st.form("bill_entry"):
             col1, col2 = st.columns(2)
             with col1:
-                month = st.text_input(t("billing_month", lang), value=datetime.now().strftime("%Y-%m"),
+                month = st.text_input(t("billing_month", lang),
+                                      value=dv.get("bill_month", datetime.now().strftime("%Y-%m")),
                                       placeholder="2026-05")
             with col2:
-                kwh = st.number_input(t("total_kwh", lang), min_value=0.0, value=350.0, step=10.0)
+                kwh = st.number_input(t("total_kwh", lang), min_value=0.0,
+                                      value=dv.get("bill_kwh", 350.0), step=10.0)
 
             estimated = tariff.calculate_bill(kwh)
             st.info(t("estimated_bill", lang, kwh=kwh, amount=estimated["total"]))
@@ -213,18 +226,24 @@ elif page == menu_items[2]:
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == menu_items[3]:
     st.title(t("appliance_title", lang))
+    dv = demo_guide.get_demo_values()
 
     st.subheader(t("compare_title", lang))
+    appliance_keys = list(tariff.APPLIANCE_DATABASE.keys())
+    default_appliance_idx = appliance_keys.index(dv["appliance_type"]) if dv.get("appliance_type") in appliance_keys else 0
+
     col1, col2 = st.columns(2)
     with col1:
-        appliance_type = st.selectbox(t("appliance_type", lang), options=list(tariff.APPLIANCE_DATABASE.keys()),
+        appliance_type = st.selectbox(t("appliance_type", lang), options=appliance_keys,
+                                      index=default_appliance_idx,
                                       format_func=lambda x: tariff.APPLIANCE_DATABASE[x]["label"])
     with col2:
-        hours = st.slider(t("hours_per_day", lang), 1.0, 24.0, 8.0, 0.5)
+        hours = st.slider(t("hours_per_day", lang), 1.0, 24.0, dv.get("hours", 8.0), 0.5)
 
     info = tariff.APPLIANCE_DATABASE[appliance_type]
-    current_watts = st.number_input(t("your_power", lang), value=float(info["old_typical_watts"]), step=50.0,
-                                    help=t("your_power_help", lang))
+    current_watts = st.number_input(t("your_power", lang),
+                                    value=dv.get("current_watts", float(info["old_typical_watts"])),
+                                    step=50.0, help=t("your_power_help", lang))
 
     comparison = tariff.compare_appliance(appliance_type, hours, current_watts)
 
@@ -277,6 +296,10 @@ elif page == menu_items[3]:
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == menu_items[4]:
     st.title(t("settings_title", lang))
+    dv = demo_guide.get_demo_values()
+
+    lang_options = ["en", "ms"]
+    default_lang_idx = lang_options.index(dv["language"]) if dv.get("language") in lang_options else (0 if household["language"] == "en" else 1)
 
     with st.form("settings"):
         col1, col2 = st.columns(2)
@@ -297,7 +320,7 @@ elif page == menu_items[4]:
 
         alert = st.slider(t("alert_threshold", lang), 50, 100, int(household["alert_threshold"] * 100),
                           help=t("alert_threshold_help", lang))
-        language = st.selectbox(t("language", lang), ["en", "ms"], index=0 if household["language"] == "en" else 1,
+        language = st.selectbox(t("language", lang), lang_options, index=default_lang_idx,
                                 format_func=lambda x: "English" if x == "en" else "Bahasa Malaysia")
 
         if st.form_submit_button(t("save_settings", lang)):
@@ -330,3 +353,6 @@ elif page == menu_items[4]:
                 if name and serial:
                     db.add_device(name, serial)
                     st.rerun()
+
+# ── Demo overlay (rendered last so it floats on top) ─────────────────────────
+demo_guide.render_overlay()
