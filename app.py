@@ -45,6 +45,14 @@ st.sidebar.caption(t("provider_label", lang, provider=household["provider"]))
 demo_guide.render_toggle(lang)
 demo_guide.render_nav()
 
+if st.sidebar.button("🔄 Reset Demo Data", help="Delete database and re-seed with demo data"):
+    import os
+    if os.path.exists(db.DB_PATH):
+        os.remove(db.DB_PATH)
+    db.init_db()
+    seed_data.seed()
+    st.rerun()
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # DASHBOARD
