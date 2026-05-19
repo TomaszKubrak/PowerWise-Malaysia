@@ -139,11 +139,16 @@ elif page == menu_items[1]:
 
             if st.form_submit_button(t("save_bill", lang)):
                 db.add_bill(month, kwh, amount, "manual")
-                if amount > household["monthly_budget"]:
-                    st.error(f"⚠️ {t('bill_over_budget', lang, amount=amount, budget=household['monthly_budget'])}")
+                budget = household["monthly_budget"]
+                tier = tariff.get_tier_for_kwh(kwh)
+                if amount > budget:
+                    over = amount - budget
+                    st.error(f"⚠️ {t('bill_over_budget', lang, amount=amount, budget=budget)}")
+                    st.warning(t("bill_feedback_over", lang, over=over, kwh=kwh, tier=tier))
                 else:
+                    under = budget - amount
                     st.success(t("bill_saved", lang))
-                st.rerun()
+                    st.info(t("bill_feedback_under", lang, under=under, kwh=kwh, tier=tier))
 
     with tab2:
         st.caption(t("meter_caption", lang))
