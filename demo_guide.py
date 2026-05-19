@@ -4,101 +4,129 @@ import streamlit as st
 
 # Each step: text (plain, no markdown), page index, highlight selector, and optional field values to set
 STEPS = [
-    # ── Scenario 1: Bill Shock ─────────────────────────────────────────────────
+    # ── Scenario 1: Higher-Than-Expected Bill — Understand, Budget & Save ─────
     {
-        "scenario": "Scenario 1: Bill Shock",
-        "text": "Aisyah opens the app and sees her latest bill EXCEEDS her RM 200 budget",
-        "page": 0,
-        "highlight": ".stAlert",
+        "scenario": "Scenario 1: Understand, Budget & Save",
+        "text": "Aisyah opens app and enters her bill: RM 185, 320 kWh, TNB",
+        "page": 1,
+        "highlight": "[data-testid='stForm']",
+        "values": {"bill_month": "2026-05", "bill_kwh": 320.0},
     },
     {
-        "scenario": "Scenario 1: Bill Shock",
-        "text": "KPIs: Latest Bill RM 278.79 | Budget RM 200 | Status: Over",
-        "page": 0,
-        "highlight": "[data-testid='stMetric']",
-    },
-    {
-        "scenario": "Scenario 1: Bill Shock",
-        "text": "Bill history chart — clear spike over the last 3 months",
+        "scenario": "Scenario 1: Understand, Budget & Save",
+        "text": "System compares to similar households — she is above average",
         "page": 0,
         "highlight": "[data-testid='stPlotlyChart']",
     },
     {
-        "scenario": "Scenario 1: Bill Shock",
-        "text": "Expand 'Understand Your Bill' — tiered breakdown Blocks 1 to 4",
+        "scenario": "Scenario 1: Understand, Budget & Save",
+        "text": "Plain-language alert explains why bill is higher (peak-hour AC usage)",
+        "page": 0,
+        "highlight": ".stAlert",
+    },
+    {
+        "scenario": "Scenario 1: Understand, Budget & Save",
+        "text": "Sets monthly budget of RM 150",
+        "page": 4,
+        "highlight": "[data-testid='stForm']",
+        "values": {"monthly_budget": 150.0},
+    },
+    {
+        "scenario": "Scenario 1: Understand, Budget & Save",
+        "text": "Views 3 saving tips: shift AC to off-peak, switch off standby, use timer",
+        "page": 2,
+        "highlight": "[data-testid='stMetric']",
+    },
+
+    # ── Scenario 2: Bill Shock — Tariff Breakdown ─────────────────────────────
+    {
+        "scenario": "Scenario 2: Bill Shock",
+        "text": "Dashboard shows red alert: bill exceeds RM 150 budget by RM 35",
+        "page": 0,
+        "highlight": ".stAlert",
+    },
+    {
+        "scenario": "Scenario 2: Bill Shock",
+        "text": "Bill history chart shows clear upward trend over recent months",
+        "page": 0,
+        "highlight": "[data-testid='stPlotlyChart']",
+    },
+    {
+        "scenario": "Scenario 2: Bill Shock",
+        "text": "Expand 'Understand Your Bill' — tiered breakdown Blocks 1 to 3",
         "page": 0,
         "highlight": "[data-testid='stExpander']",
     },
     {
-        "scenario": "Scenario 1: Bill Shock",
+        "scenario": "Scenario 2: Bill Shock",
         "text": "Usage Analysis: peak hours 12:00–20:00, AC running all afternoon",
         "page": 2,
         "highlight": "[data-testid='stPlotlyChart']",
     },
     {
-        "scenario": "Scenario 1: Bill Shock",
-        "text": "Personalized recommendations with savings: AC tip RM 15-30, standby RM 8-15",
+        "scenario": "Scenario 2: Bill Shock",
+        "text": "Personalized tip: Set AC to 25°C — potential savings RM 15-30/month",
         "page": 2,
         "highlight": "[data-testid='stMetric']",
     },
 
-    # ── Scenario 2: AC Upgrade Decision ────────────────────────────────────────
+    # ── Scenario 3: AC Upgrade Decision ────────────────────────────────────────
     {
-        "scenario": "Scenario 2: AC Upgrade",
+        "scenario": "Scenario 3: AC Upgrade",
         "text": "Aisyah checks if upgrading her old 2018 AC is worth it",
         "page": 3,
         "highlight": "[data-testid='stSelectbox']",
         "values": {"appliance_type": "air_conditioner"},
     },
     {
-        "scenario": "Scenario 2: AC Upgrade",
+        "scenario": "Scenario 3: AC Upgrade",
         "text": "Her usage: 10 hours/day at 1500W (old 3-star unit)",
         "page": 3,
         "highlight": "[data-testid='stSlider'], [data-testid='stNumberInput']",
         "values": {"hours": 10.0, "current_watts": 1500.0},
     },
     {
-        "scenario": "Scenario 2: AC Upgrade",
+        "scenario": "Scenario 3: AC Upgrade",
         "text": "Comparison: current cost vs efficient 5-star inverter model",
         "page": 3,
         "highlight": "[data-testid='stMetric']",
     },
     {
-        "scenario": "Scenario 2: AC Upgrade",
+        "scenario": "Scenario 3: AC Upgrade",
         "text": "Yearly savings — new AC pays for itself in about 3 years",
         "page": 3,
         "highlight": "[data-testid='stPlotlyChart']",
     },
     {
-        "scenario": "Scenario 2: AC Upgrade",
+        "scenario": "Scenario 3: AC Upgrade",
         "text": "SAVE 4.0 rebate: RM 200 off any 5-star AC — Eligible!",
         "page": 3,
         "highlight": ".stSuccess",
     },
 
-    # ── Scenario 3: Bahasa Malaysia ────────────────────────────────────────────
+    # ── Scenario 4: Bahasa Malaysia ────────────────────────────────────────────
     {
-        "scenario": "Scenario 3: Bahasa Malaysia",
+        "scenario": "Scenario 4: Bahasa Malaysia",
         "text": "Mother-in-law prefers BM — switch language to Bahasa Malaysia",
         "page": 4,
         "highlight": "[data-testid='stForm']",
         "values": {"language": "ms"},
     },
     {
-        "scenario": "Scenario 3: Bahasa Malaysia",
+        "scenario": "Scenario 4: Bahasa Malaysia",
         "text": "Entire UI updates — menu, titles, alerts all in Bahasa Malaysia",
         "page": 4,
         "highlight": "[data-testid='stSidebar']",
     },
     {
-        "scenario": "Scenario 3: Bahasa Malaysia",
-        "text": "Enter bill: 650 kWh for May 2026 — auto-calculates RM 278.79",
+        "scenario": "Scenario 4: Bahasa Malaysia",
+        "text": "Enter bill: 320 kWh for May 2026 — auto-calculates RM 185",
         "page": 1,
         "highlight": "[data-testid='stForm']",
-        "values": {"bill_month": "2026-05", "bill_kwh": 650.0},
+        "values": {"bill_month": "2026-05", "bill_kwh": 320.0},
     },
     {
-        "scenario": "Scenario 3: Bahasa Malaysia",
+        "scenario": "Scenario 4: Bahasa Malaysia",
         "text": "Save — alert appears: 'Bil ini melebihi bajet anda'",
         "page": 1,
         "highlight": "[data-testid='stFormSubmitButton'], .stAlert",
