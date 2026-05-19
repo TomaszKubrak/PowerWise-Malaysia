@@ -1,31 +1,31 @@
 # PowerWise Malaysia — User Scenarios (Assignment 4a Demo)
 
 ## Persona: Aisyah binti Ahmad
-- 38-year-old mother, 5-person household in Petaling Jaya, Selangor
-- Provider: TNB | Budget: RM 200/month
+- Urban housewife in Kuala Lumpur, manages the household budget for a family of 4
+- Provider: TNB
 - Moderate digital literacy, prefers Bahasa Malaysia
 
 ---
 
-## Scenario 1: Bill Shock — Understanding Why the Bill Spiked
+## Scenario 1: Higher-Than-Expected Bill — Understand, Budget & Save
 
-Aisyah receives her May bill and it's RM 278.79 — nearly RM 79 over her budget. She opens PowerWise Malaysia to understand what happened.
+Aisyah receives a higher-than-expected RM 185 bill. She wants to understand why, set a budget, and get tips to reduce future costs.
 
-1. Dashboard immediately shows a red alert: "Your bill exceeds your budget by RM 78.79"
-2. The bill history chart shows a clear spike over the last 3 months compared to normal (~RM 90–110)
-3. She expands "Understand Your Bill" and sees the tiered breakdown — her usage hit Block 4:
-   - Block 1: 200 kWh × RM 0.218 = RM 43.60
-   - Block 2: 100 kWh × RM 0.334 = RM 33.40
-   - Block 3: 300 kWh × RM 0.516 = RM 154.80
-   - Block 4: 50 kWh × RM 0.546 = RM 27.30
-4. She navigates to Usage Analysis and sees peak usage from 12:00–20:00 (AC running all afternoon/evening during hot season)
-5. Gets personalized tips: "Set AC to 25°C — potential savings RM 15-30/month"
+1. Opens app → enters bill details (RM 185, 320 kWh, TNB)
+2. System compares her usage to similar households and highlights she is above average
+3. Views a plain-language alert explaining why her bill is higher (e.g. peak-hour AC usage)
+4. Sets a monthly budget of RM 150
+5. Views 3 personalised saving tips (e.g. shift AC to off-peak, switch off standby appliances, use timer)
 
-**Demonstrates**: Dashboard, budget alerts, plain-language bill explanation, usage analysis, recommendations
+**Screen**: Dashboard with usage bar, plain-language alert, cost projection, 3 saving tips
+
+**Outcome**: Aisyah shifts AC usage to off-peak hours and sets a weekly usage reminder
+
+**Demonstrates**: Bill entry, household comparison, budget setting, recommendations
 
 ---
 
-## Scenario 2: Deciding Whether to Upgrade the AC
+## Scenario 2: Deciding Whether to Upgrade the AC (Appliance Comparison)
 
 After seeing that AC is her biggest cost driver, Aisyah considers upgrading her old 2018 air conditioner. She wants to know if it's worth the investment.
 
@@ -39,7 +39,7 @@ After seeing that AC is her biggest cost driver, Aisyah considers upgrading her 
 
 ---
 
-## Scenario 3: Setting Up and Tracking in Bahasa Malaysia
+## Scenario 3: Setting Up and Tracking in Bahasa Malaysia (Bilingual)
 
 Aisyah's mother-in-law wants to track electricity herself but is more comfortable in Bahasa Malaysia. Aisyah helps her set up.
 
